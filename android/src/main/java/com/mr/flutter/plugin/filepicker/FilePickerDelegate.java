@@ -3,6 +3,7 @@ package com.mr.flutter.plugin.filepicker;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.UriPermission;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import io.flutter.plugin.common.EventChannel;
@@ -371,8 +373,12 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
                 final ArrayList<HashMap<String, Object>> files = new ArrayList<>();
 
                 for (FileInfo file : (ArrayList<FileInfo>)data) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && file.uri != null) {
-                        this.activity.getContentResolver().takePersistableUriPermission(file.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    if (file.uri != null) {
+                        try {
+                            this.activity.getContentResolver().takePersistableUriPermission(file.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (SecurityException e) {
+                            Log.e(TAG, "Error when trying to persist uri permission: " + e, e);
+                        }
                     }
                     files.add(file.toMap());
                 }
