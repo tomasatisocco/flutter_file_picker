@@ -372,8 +372,11 @@ public class FilePickerDelegate implements PluginRegistry.ActivityResultListener
 
                 for (FileInfo file : (ArrayList<FileInfo>)data) {
                     if (file.uri != null) {
-                        this.activity.grantUriPermission(this.activity.getPackageName(), file.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        this.activity.getContentResolver().takePersistableUriPermission(file.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        try {
+                            this.activity.getContentResolver().takePersistableUriPermission(file.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (SecurityException e) {
+                            Log.e(TAG, "Error when trying to take persistable uri permission", e);
+                        }
                     }
                     files.add(file.toMap());
                 }
