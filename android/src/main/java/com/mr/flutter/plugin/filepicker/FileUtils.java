@@ -91,8 +91,8 @@ public class FileUtils {
         return result;
     }
 
-    public static Integer getFileSize(Uri uri, final Context context) {
-        Integer result = null;
+    public static Long getFileSize(Uri uri, final Context context) {
+        Long result = null;
 
         try {
 
@@ -100,7 +100,7 @@ public class FileUtils {
                 Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.SIZE}, null, null, null);
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
-                        result = cursor.getInt(cursor.getColumnIndexOrThrow(OpenableColumns.SIZE));
+                        result = cursor.getLong(cursor.getColumnIndexOrThrow(OpenableColumns.SIZE));
                     }
                 } finally {
                     cursor.close();
@@ -360,7 +360,7 @@ public class FileUtils {
 //            loadData(file, fileInfo);
 //        }
 
-        final Integer size = getFileSize(uri, context);
+        final Long size = getFileSize(uri, context);
 
         fileInfo
                 .withPath("")
