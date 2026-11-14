@@ -6,7 +6,6 @@ export './src/file_picker_result.dart';
 export './src/file_picker_macos.dart';
 export './src/linux/file_picker_linux.dart';
 export './src/file_picker_io.dart';
-// Conditional export needed for web to successfully compile,
-// as `dart:ffi` is not available on the web.
-export './src/windows/file_picker_windows_stub.dart'
-    if (dart.library.ffi) './src/windows/file_picker_windows.dart';
+// This fork ships Android and iOS only: the Windows implementation was removed
+// so the package no longer pins `win32`. The stub keeps the public name.
+export './src/windows/file_picker_windows_stub.dart';
